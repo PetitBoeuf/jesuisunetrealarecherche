@@ -19,7 +19,7 @@ function Circle(x, y) {
     stroke(255);
     noFill();
 
-    strokeWeight(2);
+    strokeWeight(1);
     ellipse(this.x, this.y, this.r * 2, this.r * 2);
   };
 

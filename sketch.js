@@ -4,33 +4,39 @@
 // Code for: https://youtu.be/QHEQuoIKgNE
 
 var circles;
+var attempts = 0;
 
 function setup() {
-  createCanvas(1000, 700);
+  createCanvas(500, 500);
   circles = [];
+  frameRate(60);
 }
 
 function draw() {
   background(0);
-  frameRate(20);
+  //frameRate(20);
 
-  var total = 5;
+  var total = 20;
   var count = 0;
-  var attempts = 0;
 
-  while (count < total) {
+  
+  if(attempts == 95){
+    noLoop();
+    console.log("Stopped with 95% accuracy (means that the script is sure at 95% that there is no available place anymore).")
+  }
+
+  while(count < total){
     var newC = newCircle();
     if (newC !== null) {
       circles.push(newC);
       count++;
+      attempts = 0;
     }
-    attempts++;
-    if (attempts > 95) {
-      noLoop();
-      console.log('finished');
-      break;
+    else{
+      attempts++;
     }
   }
+  
 
   for (var i = 0; i < circles.length; i++) {
     var circle = circles[i];
