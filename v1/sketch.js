@@ -9,14 +9,14 @@ var attempts = 0;
 function setup() {
   createCanvas(500, 500);
   circles = [];
-  frameRate(60);
+  frameRate(1);
 }
 
 function draw() {
   background(0);
   //frameRate(20);
 
-  var total = 20;
+  var total = 5;
   var count = 0;
 
   

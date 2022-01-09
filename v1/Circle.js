@@ -6,12 +6,12 @@
 function Circle(x, y) {
   this.x = x;
   this.y = y;
-  this.r = 4;
+  this.r = 10;
   this.growing = true;
 
   this.grow = function() {
     if (this.growing) {
-      this.r += 2;
+      this.r += 5;
     }
   };
 
