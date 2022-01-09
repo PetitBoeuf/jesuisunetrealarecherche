@@ -6,7 +6,7 @@
 function Circle(x, y) {
   this.x = x;
   this.y = y;
-  this.r = 1;
+  this.r = 4;
   this.growing = true;
 
   this.grow = function() {
