@@ -3,11 +3,14 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
 var circles = [],
-    min = 5,
-    max = 20,
+    min = 2,
+    max = 10,
     initMax = max,
     nbTests = 2,
     maxPlacementAttempts = 1000;
+
+var shapeWidth = 700,
+    shapeHeight = 100;
 
 var statistics = [],
     timers = [];
@@ -19,13 +22,20 @@ var iterations  = 0;
 //console.time();
 var timerStart = new Date();
 
+CreateShape()
+
 draw()
 
+function CreateShape(){
+    ctx.beginPath();
+    ctx.fillStyle= `rgb(255,255,255)`;
+    ctx.fillRect(50,50,shapeWidth,shapeHeight);
+}
 function draw(){
     //console.time();
     var c = createCircle();
     let attempts = 0;
-    while(!isValid(c)){
+    while(!IsValid(c)){
         if(max <= min){
             break;
         }
@@ -33,10 +43,10 @@ function draw(){
             max--;
         }
         attempts++;
-        c.x = Math.random() * 600;
-        c.y = Math.random() * 600;
+        c.x = Math.random() * canvas.width;
+        c.y = Math.random() * canvas.height;
     }
-    if(isValid(c)){
+    if(IsValid(c)){
         circles.push(c);
         drawCircle(c);
         animFrame = requestAnimationFrame(draw);
@@ -50,7 +60,22 @@ function draw(){
 
 }
 
-function isValid(c){
+function IsInShape(c){
+    //N
+    if(ctx.getImageData(c.x, c.y - c.r, 1, 1).data[0] != 255 ||  ctx.getImageData(c.x, c.y - c.r, 1, 1).data[1] != 255 || ctx.getImageData(c.x, c.y - c.r, 1, 1).data[2] != 255) return false;
+    //E
+    if(ctx.getImageData(c.x + c.r, c.y, 1, 1).data[0] != 255 ||  ctx.getImageData(c.x + c.r, c.y, 1, 1).data[1] != 255 || ctx.getImageData(c.x + c.r, c.y, 1, 1).data[2] != 255) return false;
+    //S
+    if(ctx.getImageData(c.x, c.y + c.r, 1, 1).data[0] != 255 ||  ctx.getImageData(c.x, c.y + c.r, 1, 1).data[1] != 255 || ctx.getImageData(c.x, c.y + c.r, 1, 1).data[2] != 255) return false;
+    //O
+    if(ctx.getImageData(c.x - c.r, c.y, 1, 1).data[0] != 255 ||  ctx.getImageData(c.x - c.r, c.y, 1, 1).data[1] != 255 || ctx.getImageData(c.x - c.r, c.y, 1, 1).data[2] != 255) return false;
+    return true;
+}
+
+function IsValid(c){
+
+    if(!IsInShape(c)) return false;
+
     if(c.x - c.r < 0 || c.x + c.r > canvas.width || c.y - c.r < 0 ||c.y + c.r > canvas.height) return false;
 
     for(let i =0; i< circles.length; i++){
@@ -67,8 +92,8 @@ function isValid(c){
 
 function createCircle(){
     return {
-        x: Math.random() * 600,
-        y: Math.random() * 600,
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
         //r: 20
         r:  Math.floor(Math.random() * (max - min +1)) + min
     }
@@ -91,6 +116,9 @@ function SaveStats(){
     statistics.push(circles.length);
     timers.push(new Date - timerStart);
     circles = [];
+    
+    //console.log(ctx.getImageData(10,10,1,1).data)
+
     if(iterations == nbTests){
         cancelAnimationFrame(animFrame);
         let average= 0;
