@@ -1,6 +1,6 @@
-const WIDTH = 200;
-const HEIGHT = 200;
-const D_MAX = 10;
+const WIDTH = 800;
+const HEIGHT = 500;
+const D_MAX = 40;
 const D_MIN = 5;
 
 const circles = [];
@@ -46,15 +46,15 @@ function isValid(circle) {
 
     return true;
 }
+function getDistance(x1, y1, x2, y2) {
+    return Math.hypot(x2-x1, y2-y1)
+}
 
 function isOutOfBounds(c) {
     if (c.x - c.r < 0 || c.x + c.r > WIDTH || c.y - c.r < 0 || c.y + c.r > HEIGHT) return true;
     return false;
 }
 
-function getDistance(x1, y1, x2, y2) {
-    return Math.hypot(x2-x1, y2-y1)
-}
 
 function createCircle(d) {
     const circle = {

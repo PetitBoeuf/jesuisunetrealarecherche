@@ -3,49 +3,49 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
 var circles = [],
-    min = 5,
-    max = 20,
-    initMax = max,
-    nbTests = 2,
-    maxPlacementAttempts = 1000;
+    min = 1,
+    max = 15;
 
-var statistics = [],
-    timers = [];
+var statistics = [];
 
 var animFrame;
 var stopDrawing = false;
 var iterations  = 0;
 
-//console.time();
-var timerStart = new Date();
-
+console.time();
 draw()
 
 function draw(){
+    console.log(circles)
     //console.time();
-    var c = createCircle();
+    var c = CreateCircle();
     let attempts = 0;
     while(!isValid(c)){
-        if(max <= min){
+        /*
+        if(attempts == 1000000){
+            stopDrawing = true;
             break;
         }
-        if(attempts == maxPlacementAttempts){
+        */
+        if(attempts == 10000){
             max--;
+            if (max < 1) stopDrawing = true;
+            break;
         }
         attempts++;
+        //console.log(attempts)
         c.x = Math.random() * 600;
         c.y = Math.random() * 600;
     }
-    if(isValid(c)){
+    if(!stopDrawing){
         circles.push(c);
-        drawCircle(c);
-        animFrame = requestAnimationFrame(draw);
+        //drawCircle(c);
+        setTimeout(function() { draw(); }, 20);
     }
     else{
-        console.log("In this attempt : " + circles.length + " circles were drawn.")
-        SaveStats();
-        //cancelAnimationFrame(draw);
-        //console.log("Stopped with 95% certainty that there is no more space available.")
+        console.log("over");
+        console.log(circles)
+        DrawAllCircles();
     }
 
 }
@@ -65,7 +65,7 @@ function isValid(c){
     return true;
 }
 
-function createCircle(){
+function CreateCircle(){
     return {
         x: Math.random() * 600,
         y: Math.random() * 600,
@@ -74,40 +74,27 @@ function createCircle(){
     }
 }
 
-function drawCircle(c){
-    ctx.beginPath();
-    ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`;
-    ctx.fill();
+function DrawAllCircles(){
+    for(let i = 0; i<circles.length; i++){
+        ctx.beginPath();
+        ctx.arc(circles[i].x, circles[i].y, circles[i].r, 0, Math.PI * 2);
+        ctx.fillStyle = 'hsl(' + 360 * Math.random() + ', 50%, 50%)';
+    }
 }
 function SaveStats(){
-    
-    var sortedCircles = new Map();
-    for(let indexRadiusGap = min; indexRadiusGap <= initMax; indexRadiusGap++)
-        sortedCircles.set(indexRadiusGap, circles.filter(c => c.r === indexRadiusGap).length)
-    console.log(sortedCircles);
-
     iterations++;
     statistics.push(circles.length);
-    timers.push(new Date - timerStart);
     circles = [];
-    if(iterations == nbTests){
+    if(iterations == 10){
         cancelAnimationFrame(animFrame);
-        let average= 0;
-        for(stat of statistics){
-            average += stat
-        }
-        average /= statistics.length;
-        console.log(average)
         console.log(statistics);
-        console.log(timers);
+        
     }
     else{
-        max=initMax;
+        console.timeEnd();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stopDrawing = false;
-        //console.time();
-        timerStart = new Date()
+        console.time();
         animFrame = requestAnimationFrame(draw);
     }
     // let csvContent = "data:text/csv;charset=utf-8,";
