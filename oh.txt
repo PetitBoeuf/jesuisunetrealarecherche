@@ -1,0 +1,23 @@
+
+https://mathworld.wolfram.com/CirclePacking.html
+
+
+
+
+placer verticalement ou horizontalement 
+
+une fois que plus de place dispo (???)
+largeur = calcul largeur max
+longueur = calcul longueur max
+puis recherche Available spots par larg / long****
+	si spot => 
+	vérifier si un rentre, 
+			si rentre => placer puis break
+			sinon baisser
+	sinon => arrêter / plus de place dispo pour --nos-- cercles
+	
+		
+	
+
+
+****recherche sur hexagone avec cercle imbriqué

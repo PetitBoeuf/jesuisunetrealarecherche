@@ -3,15 +3,14 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
 var circles = [],
-    min = 2,
+    min = 1,
     max = 10,
     initMax = max,
     nbTests = 2,
     maxPlacementAttempts = 5000;
 
 var shapeWidth = 1000,
-    shapeHeight = 650;
-
+    shapeHeight = 100;
 
 var statistics = [],
     timers = [];
@@ -22,15 +21,33 @@ var iterations  = 0;
 
 //console.time();
 var timerStart = new Date();
+var availableSpots = [];
 
-CreateShape()
+GetShapeSpots()
 
 draw()
 
-function CreateShape(){
+function GetShapeSpots(){
     ctx.beginPath();
     ctx.fillStyle= `rgb(255,255,255)`;
     ctx.fillRect((canvas.width - shapeWidth)/2,(canvas.height - shapeHeight) / 2,shapeWidth,shapeHeight);
+
+    for(let indeY = 0; indeY < canvas.height; indeY++){
+        for(let indeX = 0; indeX < canvas.width; indeX++){
+            if(ctx.getImageData(indeX, indeY, 1, 1).data[0] === 255 && ctx.getImageData(indeX, indeY, 1, 1).data[1] === 255 && ctx.getImageData(indeX, indeY, 1, 1).data[2] === 255)  
+                availableSpots.push({
+                    x : indeX,
+                    y : indeY
+                })
+        }
+    }
+
+    /*
+    ctx.moveTo(canvas.width * 0.90, canvas.height * 0.90);
+    ctx.lineTo(canvas.width / 2, canvas.height * 0.10);
+    ctx.lineTo(canvas.width * 0.10, canvas.height * 0.90);
+    ctx.fill();
+    */
 }
 function draw(){
     //console.time();
@@ -44,8 +61,9 @@ function draw(){
             max--;
         }
         attempts++;
-        c.x = Math.random() * canvas.width;
-        c.y = Math.random() * canvas.height;
+        let randomSpot = availableSpots[Math.floor(Math.random()*availableSpots.length)];
+        c.x = randomSpot.x;
+        c.y = randomSpot.y;
     }
     if(IsValid(c)){
         circles.push(c);
@@ -75,7 +93,7 @@ function IsInShape(c){
 
 function IsValid(c){
 
-    if(!IsInShape(c)) return false;
+    //if(!IsInShape(c)) return false;
 
     if(c.x - c.r < 0 || c.x + c.r > canvas.width || c.y - c.r < 0 ||c.y + c.r > canvas.height) return false;
 
@@ -92,9 +110,10 @@ function IsValid(c){
 }
 
 function CreateCircle(){
+    let randomSpot = availableSpots[Math.floor(Math.random()*availableSpots.length)];;
     return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x : randomSpot.x,
+        y : randomSpot.y,
         //r: 20
         r:  Math.floor(Math.random() * (max - min +1)) + min
     }
@@ -134,7 +153,7 @@ function SaveStats(){
     else{
         max=initMax;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        CreateShape();
+        GetShapeSpots();
         stopDrawing = false;
         //console.time();
         timerStart = new Date()
