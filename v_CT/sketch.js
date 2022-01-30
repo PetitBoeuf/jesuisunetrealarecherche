@@ -9,7 +9,7 @@ var attempts = 0;
 function setup() {
   createCanvas(500, 500);
   circles = [];
-  frameRate(1);
+  frameRate(100);
 }
 
 function draw() {
