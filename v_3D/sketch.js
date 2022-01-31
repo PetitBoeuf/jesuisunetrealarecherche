@@ -3,7 +3,7 @@ let randomArr = [];
 let max_size = 30;
 let min_size = 10;
 let max_box = 700;
-let nb_sph = 2000;
+let nb_sph = 3000;
 
 function setup() {
   createCanvas(1300, 1200, WEBGL);
@@ -15,7 +15,7 @@ function setup() {
     
     //console.log(randomArr[i]);
   }
-  frameRate(60);
+  frameRate(20);
 }
 
 function draw() {
@@ -38,7 +38,7 @@ function draw() {
       //console.log("pasvalide");
     }
     translate(randomArr[i].x,randomArr[i].y,randomArr[i].z);
-    noStroke();
+    strokeWeight(1);
     fill('green');
     sphere(randomArr[i].s);
     pop();
