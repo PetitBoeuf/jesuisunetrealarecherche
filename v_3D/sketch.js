@@ -38,8 +38,7 @@ function draw() {
       //console.log("pasvalide");
     }
     translate(randomArr[i].x,randomArr[i].y,randomArr[i].z);
-    stroke(0);
-    strokeWeight(1);
+    noStroke();
     fill('green');
     sphere(randomArr[i].s);
     pop();

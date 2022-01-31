@@ -4,7 +4,7 @@ var ctx = canvas.getContext('2d');
 
 var circles = [],
     min = 2,
-    max = 10,
+    max = 20,
     initMax = max,
     nbTests = 2,
     maxPlacementAttempts = 5000;
@@ -87,7 +87,6 @@ function IsValid(c){
             return false;
         }
     }
-
     return true;
 }
 
